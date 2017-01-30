@@ -1,0 +1,25 @@
+{
+  "name": "karsh-foundation-server",
+  "version": "1.0.0",
+  "description": "Parse API server for karsh foundation service",
+  "main": "index.js",
+  "author": "KarshK <theutkarsh246@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "license": "PRIVATE",
+  "dependencies": {
+    "express": "~4.11.x",
+    "kerberos": "~0.0.x",
+    "parse": "~1.8.0",
+    "parse-server": "*"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "TESTING_MODE=1 node index.js"
+  },
+  "engines": {
+    "node": ">=4.3"
+  }
+}

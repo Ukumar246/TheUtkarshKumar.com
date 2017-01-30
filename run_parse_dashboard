@@ -1,0 +1,1 @@
+parse-dashboard --appId BetDAREiiaig5uxPY68P$Y68P --masterKey REEUfRx0pB98ciTTQamPQWRKc --serverURL "http://localhost:1337/parse" --appName DareApp --host localhost --port 4040 
