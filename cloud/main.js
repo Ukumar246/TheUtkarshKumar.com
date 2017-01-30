@@ -1,9 +1,4 @@
 // Deployed by karsh X @ Fri 1:47 PM
-var Stripe = require('stripe');
-Stripe.initialize('sk_test_oG4972Grob0VQjt1AXyzgYzF');// Warning: Secret KEY!!
-
-var Mailgun = require('mailgun');
-Mailgun.initialize('sandboxf9bfc87f52304e0a8fcda5376ad96404.mailgun.org', 'key-96d90b889d298c256aeb883d6399de04');
 
 Parse.Cloud.define("test", function(request, response) {
 	console.log("Parse Cloud Code Works!");
@@ -421,7 +416,8 @@ Parse.Cloud.define("email", function(request, response)
     console.log("* email to: " + emailTo);
     console.log("* subject: " + subject);
     console.log("* text: " + text);
-
+    response.error("Mailgun not setup yet :/");
+    /*
     Mailgun.sendEmail({
           to: emailTo,
           from: "orders@teamsyncweb.com",
@@ -440,7 +436,7 @@ Parse.Cloud.define("email", function(request, response)
             response.error(httpResponse);
         } 
     });   
-
+    */
 });
 
 // PAYMENT FUNCTION
@@ -454,7 +450,8 @@ Parse.Cloud.define("charge", function(request, response) {
   var emailAddress = request.params.email;
     
   console.log("#Running payment with: \n*token: \t" + token + "\n*amount: \t" + amount + "\n*description: \t" + descriptionText + "\n*Card Holder Name: \t" + cardHolderName);
-    
+  response.error("Unfinished Function Called");
+  /*
   Stripe.Charges.create({
     amount:       amount,               // In cents
     currency:     "usd",
@@ -485,5 +482,5 @@ Parse.Cloud.define("charge", function(request, response) {
       response.error("Error: "+ httpResponse);
     }
   });
-
+  */
 });
