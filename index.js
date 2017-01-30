@@ -10,7 +10,8 @@ const chalk = require('chalk');
   const APP_ID = 'qUTvoKARSHpFjhbIHUuSX6frleI24XPaF';
   const CLIENT_KEY = "KarshKizBlClIhKzbPFLohajaaIsGret3DS9cYyzD";
   const MASTER_KEY = '2veMUVmPFeOET,0LIK&&SDCOLcy';
-  const MONGODB_URI = "mongodb://karshk:hLPToUCPj1xSpD1Thj~'Be@ds137139.mlab.com:37139/heroku_svw9v2wm";
+  const MONGODB_URI = "mongodb://heroku_svw9v2wm:mgk37r9c9tt1tj2t7cumailgsu@ds137139.mlab.com:37139/heroku_svw9v2wm";
+  //"mongodb://karshk:WeTK@/efGe'pOVVw1HJc@ds137139.mlab.com:37139/heroku_svw9v2wm";
   const MONGODB_URI_LOCAL = 'mongodb://localhost:27017/mydb';
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
@@ -28,9 +29,9 @@ var api = new ParseServer({
   
   appId: process.env.APP_ID || APP_ID,
   clientKey: process.env.CLIENT_KEY || CLIENT_KEY,
-  masterKey: process.env.MASTER_KEY || MASTER_KEY, // Add your master key here. Keep it secret!
-
-  facebookAppIds: [],            // App Facebook ID
+  masterKey: process.env.MASTER_KEY || MASTER_KEY, 
+  fileKey: 'b1c74f86-b612-41e4-8936-05e1b140ca82',
+  facebookAppIds: ['1512525229067852'],            // App Facebook ID
 
   serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
   liveQuery: {

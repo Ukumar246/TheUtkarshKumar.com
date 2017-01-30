@@ -1,190 +1,489 @@
-Parse.Cloud.define('hello', function(request, response) {
-	response.success('Hello from the server');
+// Deployed by karsh X @ Fri 1:47 PM
+var Stripe = require('stripe');
+Stripe.initialize('sk_test_oG4972Grob0VQjt1AXyzgYzF');// Warning: Secret KEY!!
+
+var Mailgun = require('mailgun');
+Mailgun.initialize('sandboxf9bfc87f52304e0a8fcda5376ad96404.mailgun.org', 'key-96d90b889d298c256aeb883d6399de04');
+
+Parse.Cloud.define("test", function(request, response) {
+	console.log("Parse Cloud Code Works!");
+  	response.success("cool");
 });
 
-/**
-	@params: 
-			+	user_location_lat	$GeoPoint
-			+	user_location_lon	$GeoPoint
-			+	place_id			$:String 	- Google Place ID 
-			+ 	place_name 			:String 	- Google Place name 
-			+  	place_location_lon	:GeoPoint 	- Location of the place. 
-			+  	place_location_lat	:GeoPoint 	- Location of the place. 
-			+ 	place_type			:[String]	- The types of this place. 
-			+ 	place_website		:String		- Website for this place. 
-			+ 	place_address		:String 
-*/
+// ----------- Request Objects -----------
+Parse.Cloud.define("requestAdminAccount", function(request, response) 
+{
+	var schoolName      = request.params.schoolName;
+    var locationAddress = request.params.locationAddress;
+    var district        = request.params.district;
+    var email           = request.params.email;
+    var phone           = request.params.phone;
+    var name            = request.params.name;
+    
+    var RequestObject = Parse.Object.extend("Requests");
+    var request = new RequestObject();
 
-Parse.Cloud.define('check-in', function(request, response){
-	Parse.Cloud.useMasterKey();			// <<-- Use with extreme security precaution
+    request.set("schoolName", schoolName);
+    request.set("locationAddress", locationAddress);
+    request.set("district", district);
+    request.set("email", email);
+    request.set("name", name);
+    request.set("phone", phone);
+    console.log('* Saving Request....');
+    
+    request.save(null, 
+    {
+        success: function(request) 
+        {
+            console.log("* Request saved");
 
-	//Extract Data
-	var user_location_lat = request.params.user_location_lat;
-	var user_location_lon = request.params.user_location_lon;
+            // Send Email
+            var emailSubjectString = 'Hey ' + name + '! '+ 'Thank you for signing up for TeamSync.';
+            var textString = 'We can\'t wait to get you started with TeamSync. \n\nOne of our team members will be in contact with you shortly to guide you through the setup process and make sure you\'re satisfied with every step.\n\n' + 'We have a strong commitment to help sport lovers feel the love and passion behind the game.\n\nBest Regards,\n-Your friends at TeamSync.';
+            var recipientString = email + ',' + 'orders@teamsyncweb.com,' + 'quinn@teamsyncweb.com,' + 'kyle@teamsyncweb.com,' + 'dilip@teamsyncweb.com'; 
 
-	var place_id		  = request.params.place_id;
+            console.log('* Email Recipients ' + recipientString);
 
-	var place_location_lat = request.params.place_location_lat;
-	var place_location_lon = request.params.place_location_lon;
-	
-	
-	var dist = distance(user_location_lat, user_location_lon, place_location_lat, place_location_lon);
-	
-	var DISTANCE_LIMIT = process.env.DISTANCE_LIMIT || 30.0;
-	
-	console.log("[check-in] check into google place ", place_id);
-	console.log("[check-in] distance: ", dist,
-				"[check-in] LIMIT: ", DISTANCE_LIMIT);
-
-	// Distance Filter
-	if (dist > DISTANCE_LIMIT){
-		response.error('Distance exceeds '+ DISTANCE_LIMIT+' meter limit for check in feature');
-		return;
-	}
-
-	// find place in db 
-	checkForPlaceInDB(place_id, function(result, error){	
-        if (result != null){
-        	// We found this place so check the user into it
-            console.log("[check-in] checking in to existing place...");
-            checkInUser(request.user, result, function(status, push_sent, error_string){
-            	if (status == true && push_sent == true){
-
-		            response.success('checked in to place '+result.id+'. push notif sent');
-            	}
-		       	else{	// Status is false here - so something big failed - not push
-				
-					response.error(error_string);
-				}
-            });
-        }
-        else{	
-			console.log("[check-in] registering new place on db...");
-
-            // Place not found - A create place, B check user in
-       	    var PlaceClass = Parse.Object.extend("Place");
-            var newPlace = new PlaceClass();
-
-            // Set Fields for new Place
-            newPlace.set("name", request.params.place_name);
-            newPlace.set("placeId", place_id);
-            newPlace.set("address", request.params.place_address);
-            //newPlace.set("types", request.params.place_types);
-
-            var point = new Parse.GeoPoint({latitude: place_location_lat, longitude: place_location_lon});
-            newPlace.set("location", point);
-
-            newPlace.save(null, {
-                success: function(place) {
-                    // New Place was saved
-                    console.log('[check-in] new place registed on db with id ' + place.id);
-
-                    checkInUser(request.user, place, function(status, push_sent, error_string) {
-                        if (status == true && push_sent == true) {
-                            var success_str = 	'checked in to place '+
-                            					place.id + 
-                            					'. push notif sent';
-
-                            console.log('[check-in] done. \t' + success_str);
-                        	response.success(success_str);
-
-                        } else { // Status is false here - so something big failed - not push
-                            
-                            console.log('[check-in] error.', response);
-                            response.error(error_string);
-                        }
-                    });
+            Parse.Cloud.run('email', {"emailTo":recipientString,"subject":emailSubjectString,"text": textString},{
+                success: function(result) 
+                {
+                    console.log("* Email Sent!");
+                    response.success("$ Email Sent!");
                 },
-                error: function(place, error) {
-                    // Return bad resp
-                    var error_string = 'failed to register this place on our DB.\nerror message: ' + error.message;
-                    console.error('[check-in] ' + error_string);
-                    response.error(error_string);
+                error: function(error) 
+                {
+                    console.log("* Email Returned Error" + error.message);
+                    response.error(error);
                 }
             });
+      },
+      error: function(request, error) 
+        {
+          console.error("* Request FAILED TO SAVE "+ error.message);
+          response.error(error.message);
+        }
+    });
+});
 
-		}
-	});
-/* 
-	Check the User In 
-	-NOTE: THis function Returns on callback @param
-	@param: callback <function(status, push_sent, error_string)>
+// ----------- Before Save Team ------------
+Parse.Cloud.beforeSave("Team", function(request, response)
+{  
+    console.log('===== Before Save Team ========');
+    var ghost = request.object.get('ghost');
+    var team = request.object;
+    
+    if (ghost == true)
+    {
+        console.log('* Ghost Team');
+        // Send email to self!
+        
+        team.set('teamWins', 0);
+        team.set('teamLosses', 0);
+
+        team.set('scorekeepers', []);
+        team.set('subscribers', []);
+        team.set('games', []);        
+    }
+    
+    response.success();
+});
+
+// ----------- After Save Team ------------
+Parse.Cloud.afterSave("Team", function(request) {
+	var thisObject = request.object;
+    console.log("====== AFTER SAVE TEAM =========");
+    
+	var querySchool = thisObject.get('school');
+	// Add Schools' teams
+	querySchool.fetch(
+        {
+          success: function(school) {
+            
+              console.log('* Query Success: School found');
+              school.addUnique('teams', thisObject);
+              
+              school.save(null, {
+                  success: function(school) {
+                    console.log('* Added to school teams successfully!\n*# School Saved!');
+                  },
+                  error: function(school, error) 
+                  {
+                    console.error('* ## Couldnt save school!' + error.message);                  }
+                });
+          },
+          error: function(school, error) {
+            console.error('* Error: could not fetch school');
+          }
+        });
+});
+
+// ----------- Before Save Game ------------
+/*
+Parse.Cloud.beforeSave("Game", function(request, response){
+    var thisUser = Parse.User.current();
+	var thisObject = request.object;
+
+    // Save Game
+    thisObject.set("inProgress",1);
+    thisObject.set("createdBy", thisUser);
+    
+    // CREATE Home Score Objects
+    var homeScoreObj = Parse.Object.extend("Score_basketball");
+    var gameScore = new homeScoreObj();
+    gameScore.set("score", 0);
+    gameScore.set("quarterScore1", 0);
+    gameScore.set("quarterScore2", 0);
+    gameScore.set("quarterScore3", 0);
+    gameScore.set("quarterScore4", 0);
+    gameScore.set("homeTeam", true);
+
+    thisObject.set("homeTeamScore", gameScore);                // Home Game Score
+    
+    gameScore.save(null, {
+      success: function(gameScore) {
+            console.log("* home game score saved");
+
+            var awayScoreObj = Parse.Object.extend("Score_basketball");
+            var awayScore = new awayScoreObj();
+            awayScore.set("score", 0);
+            awayScore.set("quarterScore1", 0);
+            awayScore.set("quarterScore2", 0);
+            awayScore.set("quarterScore3", 0);
+            awayScore.set("quarterScore4", 0);
+            awayScore.set("homeTeam", false);
+          
+            thisObject.set("awayTeamScore", awayScore);         // Away Game Score							
+
+            awayScore.save(null, {
+                success: function(awayScore) {
+                     console.log("* away game score saved");
+                     console.log("## GAME Save SUCCESSFUL! ##");
+                    // SUCESS
+                    response.success();
+                },
+                error: function(awayScore, error) {
+                    console.error("* away game score failed to save" + error.message);
+                    // FAIL
+                    response.error();
+                }
+            });
+        },
+        error: function(gameScore, error) {
+                    console.error("* home game score failed to save" + error.message);
+                    response.error();
+        }
+    });	
+});
 */
-	function checkInUser(user, place, callback){
-    	// Find users in the same place
-		var userQuery = new Parse.Query(Parse.User); userQuery.equalTo("checkedIn", place);
-		// Find devices associated with these users
-		var pushQuery = new Parse.Query(Parse.Installation); pushQuery.matchesQuery('user', userQuery);
-		
-		// Send push notifications
-		Parse.Push.send({
-		  where: pushQuery,
-		  data: {
-		  	alert: "New user just checked in to this place!",
-			badge: "Increment",
-			sound: "cheering.caf",
-			title: "Dare New Activity"
-		  }
-		}, { useMasterKey: true })
-		.then(function() {
-		  	// Push sent!
-		  	console.log("[check-in] push notifications sent!");
-		  
-		  	// Save User:
 
-		  	// Time Stamp User
-        	var time = new Date();
-      		user.set("lastCheckInTime", time);		
-		  	
-		  	user.set("checkedIn", place);
-			user.save().then(function(obj) {
-				// Everything Done:
-				console.log('[check-in] saved user data!');
-				callback(true, true, null);
-				
-			}, function(error) {
-			    // saving the user failed.
-			    var error_str = 'failed to save user data.\nerror code: ' + error.message;
-	            console.error('[check-in] ' + error_str);
-	            
-	            callback(false, true, error_str);
+
+// ----------- After Save Game -------------
+Parse.Cloud.afterSave("Game", function(request) {
+
+    var thisUser = Parse.User.current();
+	var thisObject = request.object;
+
+    console.log("====== AFTER SAVE GAME =========");
+    
+	var queryTeam = thisObject.get("awayTeamID");
+	// Add to Away Team
+	queryTeam.fetch({  
+		success: function(awayTeam){
+			awayTeam.addUnique("games", thisObject);
+			awayTeam.save();
+            console.log("* away team fetched and linked");
+
+			// Add to Home Team
+      		var queryHomeTeam = thisObject.get("homeTeamID");
+			queryHomeTeam.fetch({
+				success: function(homeTeam){
+					homeTeam.addUnique("games", thisObject);
+					homeTeam.save();										
+                    
+                    // Home Score Link
+                    var queryHomeScore = thisObject.get("homeTeamScore");
+                    queryHomeScore.fetch({
+                        success: function(homeScore){ 
+                            homeScore.set("game", thisObject);
+                            console.log("* home score linked to game!");
+                            
+                            // Away Score Link
+                            var queryAwayScore = thisObject.get("awayTeamScore");
+                            queryAwayScore.fetch({
+                                success: function(awayScore){ 
+                                    awayScore.set("game", thisObject);
+                                    console.log("* away score linked to game!");
+                                    
+                                    console.log("*** GAME SAVE PROCESS COMPLETE *** :Karsh is a true G");
+                                },
+                                error: function(awayScore, error){
+                                    console.error("* query error: away score could not be fetched");        
+                                }
+                       
+                            });
+                            
+                        },
+                        error: function(homeScore, error){
+                            console.error("* query error: home score could not be fetched");        
+                        }
+                       
+                    });
+                
+                },
+                error: function(homeTeam, error)
+                {
+                    console.error("* query error: home team could not be fetched");
+                }
+            });
+        },
+        error: function(awayTeam, error)
+        {
+            console.error("* query error: could not fetch away team");
+        }
+    });
+
+});
+
+/*
+Parse.Cloud.afterSave("Score_basketball", function(request) {
+    var thisUser = Parse.User.current();
+	var thisObject = request.object;
+
+    console.log("** After Save Score \t" + " ====== STAUTS: existed= " + thisObject.isNew()  + " ========= ");
+    
+    var queryGame = thisObject.get("game");
+    
+    queryGame.fetch({
+          success: function(gameObject) {
+            console.log("* game fetched");
+            
+            if (thisObject.get("homeTeam") == true)
+            {
+                console.log("* adding pointer to original game object \t field: home");
+                gameObject.set("homeTeamScore", thisObject); 
+                
+                gameObject.save(null, {
+                      success: function(gameScore) {
+                        console.log("* original game object saved");
+                      },
+                      error: function(gameScore, error) {
+                        console.error("* original game object could NOT SAVE! \t reason:" + error.message);
+                      }
+                });
+            }
+            else
+            {
+                console.log("* adding pointer to original game object \t field: away");
+                gameObject.set("awayTeamScore", thisObject); 
+                
+                gameObject.save(null, {
+                      success: function(gameScore) {
+                        console.log("* original game object saved");
+                      },
+                      error: function(gameScore, error) {
+                        console.error("* original game object could NOT SAVE! \t reason:" + error.message);
+                      }
+                });
+            }
+             
+          },
+          error: function(gameObject, error) {
+            console.error("* game fetch failed \treason:" + error.message);
+          }
+    });
+    
+});
+*/
+
+//afterDelete triggger that removes references to deleted game in the correponding teams as well as deletes the score objects connected to the game
+Parse.Cloud.afterDelete("Game", function(request){
+	//delete score objects
+	var queryAwayScore = request.object.get("awayTeamScore");
+
+	queryAwayScore.fetch({
+		success: function(awayScore){
+			awayScore.destroy({
+			  success: function(myObject) {
+
+			    	var queryHomeScore = request.object.get("homeTeamScore");
+
+					queryHomeScore.fetch({
+						success: function(homeScore){
+							homeScore.destroy({
+							  success: function(myObject) {
+
+							    // The object was deleted from the Parse Cloud.
+
+							    //delete reference to game in the team objects
+								var queryTeam = request.object.get("awayTeamID");
+
+								queryTeam.fetch({
+									success: function(awayTeam){
+
+										console.log("Success in Fetching awayTeam Object. Destroying Now.");
+
+										awayTeam.remove("games", request.object);
+										awayTeam.save();
+
+							      		var queryTeam = request.object.get("homeTeamID");
+
+										queryTeam.fetch({
+											success: function(homeTeam){
+
+												console.log("Success in Fetching homeTeam Object. Destroying Now.");
+
+
+												homeTeam.remove("games", request.object);
+												homeTeam.save();
+											},
+											error: function(homeTeam, error){
+												console.error("Error removing game from homeTeam array! " + error.code + ": " + error.message);
+											}
+										});
+									},
+									error: function(myObject, error){
+										console.error("Error removing game from awayTeam array! " + error.code + ": " + error.message);
+									}
+
+								});
+
+
+							  },
+							  error: function(myObject, error) {
+							    // The delete failed.
+							    // error is a Parse.Error with an error code and message.
+							    console.error("Error deleting homeTeamScore " + error.code + ": " + error.message);
+							  }
+							});
+						}
+
+					});
+			  },
+			error: function(myObject, error) {
+			    // The delete failed.
+			    // error is a Parse.Error with an error code and message.
+          		console.error("Error deleting awayTeamScore " + error.code + ": " + error.message);
+			  }
 			});
-		}, function(error) {
-		  // There was a problem :(
-		  var error_str = "push notification error: " + error.message;
-		  console.error("[check-in] "+error_str);
-		  
-		  callback(false, false, error_str);return;
+		}
 
-		});
-	}
+	});
 
-	//Haversine formula betwen two lat lon points
-	function distance(lat1, lon1, lat2, lon2)
-	{
-		var p = 0.017453292519943295;    // Math.PI / 180
-		var c = Math.cos;
-		var a = 0.5 - c((lat2 - lat1) * p)/2 + 
-		      c(lat1 * p) * c(lat2 * p) * 
-		      (1 - c((lon2 - lon1) * p))/2;
+});
 
-		return 12742 * Math.asin(Math.sqrt(a)) * 1000; // Answer in meters
-	}
+Parse.Cloud.define("sendPushToUser", function(request, response) {
+  var senderUser = request.user;
+  var channel = request.params.channel;
+  var message = request.params.message;
 
-	function checkForPlaceInDB(place_id, callback)
-	{	// Find the place with same place id in database
-		var PlaceClass = Parse.Object.extend("Place");
-		var query = new Parse.Query(PlaceClass);
-		query.equalTo("placeId", place_id);
+/* Potential For Fututre Implementation. */
 
-		query.first({
-		  success: function(result) {
-            callback(result, null);
-		  },
-		  error: function(error) {
-		    console.error("[check-in] Error: " + error.message);
-            callback(null, error);
-		  }
-		});	
-	}
+  // // Validate that the sender is allowed to send to the recipient.
+  // // For example each user has an array of objectIds of friends
+  // if (senderUser.get("friendIds").indexOf(recipientUserId) === -1) {
+  //   response.error("The recipient is not the sender's friend, cannot send push.");
+  // }
+
+  // // Validate the message text.
+  // // For example make sure it is under 140 characters
+  // if (message.length > 140) {
+  // // Truncate and add a ...
+  //   message = message.substring(0, 137) + "...";
+  // }
+
+  Parse.Push.send({
+	  	channels: [channel],
+	 	 data: {
+	 	   alert: message
+	 	 }
+	  },
+	 {
+	  success: function() {
+	      response.success("Push was sent successfully.")
+	  },
+	  error: function(error) {
+	      response.error("Push failed to send with error: " + error.message);
+	 }
+  });
+  
+});
+
+/* ---------------------- Server Functions -----------------------------*/
+// EMAIL Function
+Parse.Cloud.define("email", function(request, response)
+{
+    console.log("** ==== email invoked on the cloud ==== **");
+    
+    var emailTo = request.params.emailTo;
+    var subject = request.params.subject;
+    var text = request.params.text;
+    
+    console.log("* email to: " + emailTo);
+    console.log("* subject: " + subject);
+    console.log("* text: " + text);
+
+    Mailgun.sendEmail({
+          to: emailTo,
+          from: "orders@teamsyncweb.com",
+          subject: subject,
+          text: text
+    }, {
+        success: function(httpResponse) 
+        {
+            console.log("* Email Success! ");
+            //console.log(httpResponse);
+            response.success("Email sent!");
+        },
+        error: function(httpResponse) 
+        {
+            console.error("ERROR: " + httpResponse);
+            response.error(httpResponse);
+        } 
+    });   
+
+});
+
+// PAYMENT FUNCTION
+Parse.Cloud.define("charge", function(request, response) {
+
+  var token = request.params.token;
+  var amount = request.params.amount;
+  var dollarAmount = amount/100;
+  var descriptionText = request.params.description;
+  var cardHolderName = request.params.cardholdername;
+  var emailAddress = request.params.email;
+    
+  console.log("#Running payment with: \n*token: \t" + token + "\n*amount: \t" + amount + "\n*description: \t" + descriptionText + "\n*Card Holder Name: \t" + cardHolderName);
+    
+  Stripe.Charges.create({
+    amount:       amount,               // In cents
+    currency:     "usd",
+    card:         token,
+    description:  descriptionText,
+  },{
+    success: function(httpResponse) {
+      console.log("$$ payment success $$" + "-What A G");
+
+        var emailPaymentSubjectText = 'Hello '+ cardHolderName + '! Your order is being processed.';
+        var textString = 'Your credit card statement will include an invoice of $' + dollarAmount + '.\nOrder description: ' + descriptionText + '\n\nThankyou for using Team Sync in your schools.\nWe hope you have a record setting year\n\nFor any help, questions, setup, or just to voice your opinion please dont hesitate to email us at support@teamsyncweb.com\n\n-Your friends at Team Sync :)';
+        
+        Parse.Cloud.run('email', {"emailTo":emailAddress,"subject":emailPaymentSubjectText,"text": textString}, {
+            success: function(result) 
+            {
+                console.log("* Email Sent!");
+                response.success("$ Payment Successful, Email Sent!");
+            },
+            error: function(error) 
+            {
+                console.log("* Email Returned Error" + error.description);
+                response.success("$ Payment Successful, Email NOT SENT!");
+            }
+        });
+    },
+    error: function(httpResponse) {
+      console.error(" --- Uh oh, something went wrong" + "\terror message: "+ httpResponse + " --- ");
+      response.error("Error: "+ httpResponse);
+    }
+  });
+
 });
