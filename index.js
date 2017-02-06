@@ -13,6 +13,7 @@ const chalk = require('chalk');
   const MONGODB_URI = "mongodb://heroku_svw9v2wm:mgk37r9c9tt1tj2t7cumailgsu@ds137139.mlab.com:37139/heroku_svw9v2wm";
   //"mongodb://karshk:WeTK@/efGe'pOVVw1HJc@ds137139.mlab.com:37139/heroku_svw9v2wm";
   const MONGODB_URI_LOCAL = 'mongodb://localhost:27017/mydb';
+  var serverUrl = process.env.SERVER_URL || 'http://localhost:1337/parse';
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
 var bundleId = process.env.BUNDLE_ID  || 'com.Dare.ios';
@@ -22,7 +23,8 @@ if (!databaseUri) {
   databaseUri = MONGODB_URI;
 }
 
-// Default: mongodb://127.0.0.1:27017/mydb
+console.log(chalk.green('Running on Server URL: ', serverUrl));
+
 var api = new ParseServer({
   databaseURI: databaseUri,
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
@@ -30,14 +32,10 @@ var api = new ParseServer({
   appId: process.env.APP_ID || APP_ID,
   clientKey: process.env.CLIENT_KEY || CLIENT_KEY,
   masterKey: process.env.MASTER_KEY || MASTER_KEY, 
-  fileKey: 'b1c74f86-b612-41e4-8936-05e1b140ca82',
   facebookAppIds: ['1512525229067852'],            // App Facebook ID
-
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
-  liveQuery: {
-    classNames: [] // List of classes to support for query subscriptions
-  }
+  serverURL: serverUrl
 });
+
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
