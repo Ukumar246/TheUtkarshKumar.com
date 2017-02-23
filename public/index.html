@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html>
+  <title>Utkarsh Kumar</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS & JS Links -->
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+  body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
+  .w3-row-padding img {margin-bottom: 12px}
+  /* Set the width of the sidenav to 120px */
+  .w3-sidenav {width: 120px;background: #222;}
+  /* Add a left margin to the "page content" that matches the width of the sidenav (120px) */
+  #main {margin-left: 120px}
+  /* Remove margins from "page content" on small screens */
+  @media only screen and (max-width: 600px) {#main {margin-left: 0}}
+</style>
+
+<body class="w3-black">
+
+  <!-- Icon Bar (Sidenav - hidden on small screens) -->
+  <nav class="w3-sidenav w3-center w3-small w3-hide-small">
+    <a class="w3-padding-large w3-black" href="#">
+      <i class="fa fa-home w3-xxlarge"></i>
+      <p>HOME</p>
+    </a>
+    <a class="w3-padding-large w3-hover-black" href="#about">
+      <i class="fa fa-user w3-xxlarge"></i>
+      <p>ABOUT</p>
+    </a>
+    <a class="w3-padding-large w3-hover-black" href="#photos">
+      <i class="fa fa-eye w3-xxlarge"></i>
+      <p>PHOTOS</p>
+    </a>
+    <a class="w3-padding-large w3-hover-black" href="#contact">
+      <i class="fa fa-envelope w3-xxlarge"></i>
+      <p>CONTACT</p>
+    </a>
+  </nav>
+
+  <!-- Navbar on small screens (Hidden on medium and large screens) -->
+  <div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
+    <div class="w3-bar w3-black w3-opacity w3-hover-opacity-off w3-center w3-small">
+      <a class="w3-bar-item w3-button" style="width:25% !important" href="#">HOME</a>
+      <a class="w3-bar-item w3-button" style="width:25% !important" href="#about">ABOUT</a>
+      <a class="w3-bar-item w3-button" style="width:25% !important" href="#photos">PHOTOS</a>
+      <a class="w3-bar-item w3-button" style="width:25% !important" href="#contact">CONTACT</a>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="w3-padding-large" id="main">
+    <!-- Header/Home -->
+    <header class="w3-container w3-padding-32 w3-center w3-black" id="home">
+      <h1 class="w3-jumbo"><span class="w3-hide-small">I'm</span> Karsh.</h1>
+      <p>Entrepenur and software business consultant</p>
+      <img src="assets/img/me.jpg" alt="boy" class="w3-image" width="700" height="800">
+    </header>
+
+    <!-- About Section -->
+    <div class="w3-content w3-justify w3-text-grey w3-padding-64" id="about">
+      <h2 class="w3-text-light-grey">Who am I?</h2>
+        
+        <hr style="width:200px" class="w3-opacity">
+        <p> I am an enthusiastic 21 year old college student from University Toronto. I live and breathe computer technology, ever since I was 7 years old. When I saw my father soldering some wires to fix our broken TV I was in awe, I soon began taking apart all my toys to stip the wires, lights, motors and speakers out of them so I could fit them into something of my own creation. I was a doctor in my room, taking parts out of one device and bringing fixable ones to life. Soon I was getting asked from everyone around my neighborhood to fix their computers, tv's, etc. 
+        <br>
+        <br>
+        Once I started high school my focus shifted towards software and hardware; While students in my class would work on HTML and Alice I was making a new device with LEDs which would be controlled by a computer's parallel port. 
+        <br>
+        <br>
+        Today I continue to persue my passion and advance my skills at University of Toronto Edward Rogers Electrical and Computer Engineering department. My vision for computer software blends with starting my own business to help people around the world with the incredible advancement of growing technology.
+        </p>
+
+      <!-- Skills -->
+      <h3 class="w3-padding-16 w3-text-light-grey">My Skills</h3>
+      <p class="w3-wide">iOS Development</p>
+      <div class="w3-white">
+        <div class="w3-green" style="height:28px;width:95%"></div>
+      </div>
+      <p class="w3-wide">Backend Technologies</p>
+      <div class="w3-white">
+        <div class="w3-blue" style="height:28px;width:85%"></div>
+      </div>
+      <p class="w3-wide">Web Development and Design</p>
+      <div class="w3-white">
+        <div class="w3-yellow" style="height:28px;width:80%"></div>
+      </div><br>
+      
+      <div class="w3-row w3-center w3-padding-16 w3-section w3-light-grey">
+        <div class="w3-quarter w3-section">
+          <span class="w3-xlarge">7+</span><br>
+          Clients Delivered
+        </div>
+        <div class="w3-quarter w3-section">
+          <span class="w3-xlarge">22+</span><br>
+          Projects Done
+        </div>
+        <div class="w3-quarter w3-section">
+          <span class="w3-xlarge">8+</span><br>
+          Years Experience
+        </div>
+        <div class="w3-quarter w3-section">
+          <span class="w3-xlarge">100+</span><br>
+          Meetings
+        </div>
+      </div>
+
+      <button class="w3-btn w3-light-grey w3-padding-large w3-section w3-hover-grey">
+        <i class="fa fa-download"></i> Download Resume
+      </button>
+      
+      <!-- Pricing -->
+      <button class="w3-btn w3-light-grey w3-padding-large w3-section w3-hover-grey">
+        <i class="fa fa-usd"></i> Contact for Quote
+      </button>
+
+      <!-- End Grid/Pricing tables -->
+      
+      <!-- Testimonials 
+      <h3 class="w3-padding-24 w3-text-light-grey">My Reputation</h3>  
+      <img src="assets/img/bandmember.jpg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:80px">
+      <p><span class="w3-large w3-margin-right">Chris Fox.</span> CEO at Mighty Schools.</p>
+      <p>Jane Doe saved us from a web disaster.</p><br>
+      
+      <img src="assets/img/avatar_g2.jpg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:80px">
+      <p><span class="w3-large w3-margin-right">Rebecca Flex.</span> CEO at Company.</p>
+      <p>No one is better than Jane Doe.</p>
+      -->
+    <!-- End About Section -->
+    </div>
+    
+    <!-- Portfolio Section -->
+    <div class="w3-padding-64 w3-content" id="photos">
+      <h2 class="w3-text-light-grey">My Portfolio</h2>
+      <hr style="width:200px" class="w3-opacity">
+
+      <!-- Grid for photos -->
+      <div class="w3-row-padding" style="margin:0 -16px">
+        <div class="w3-half">
+          <img src="assets/img/competish 1.png" style="width:45%">
+          <img src="assets/img/competish 2.png" style="width:45%">
+          <img src="assets/img/competish 3.png" style="width:45%">
+          <img src="assets/img/competish 4.png" style="width:45%">
+        </div>
+
+        <div class="w3-half">
+          <img src="assets/img/glimpse 1.png" style="width:45%">
+          <img src="assets/img/glimpse 2.png" style="width:45%">
+          <img src="assets/img/glimpse 4.png" style="width:45%">
+          <img src="assets/img/glimpse 9.png" style="width:45%">
+        </div>
+
+        <div class="w3-half">
+          <img src="assets/img/ts 1.png" style="width:45%">
+          <img src="assets/img/ts 5.jpg" style="width:45%">
+        </div>
+
+        <div class="w3-half">
+          <img src="assets/img/ts 6.jpg" style="width:45%">
+          <img src="assets/img/ts 7.jpg" style="width:45%">
+        </div>
+      <!-- End photo grid -->
+      </div>
+    <!-- End Portfolio Section -->
+    </div>
+
+    <!-- Contact Section -->
+    <div class="w3-padding-64 w3-content w3-text-grey" id="contact">
+      <h2 class="w3-text-light-grey">Contact Me</h2>
+      <hr style="width:200px" class="w3-opacity">
+
+      <div class="w3-section">
+        <p><i class="fa fa-map-marker fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> Toronto, ON</p>
+        <p><i class="fa fa-phone fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> Phone: 416-571-2209</p>
+        <p><i class="fa fa-envelope fa-fw w3-text-white w3-xxlarge w3-margin-right"> </i> Email: me@theutkarshkumar.com</p>
+      </div><br>
+      <p>Lets get in touch. Send me a message:</p>
+
+      <form action="/action_page.php" target="_blank">
+        <p><input class="w3-input w3-padding-16" type="text" placeholder="Name" required name="Name"></p>
+        <p><input class="w3-input w3-padding-16" type="text" placeholder="Email" required name="Email"></p>
+        <p><input class="w3-input w3-padding-16" type="text" placeholder="Subject" required name="Subject"></p>
+        <p><input class="w3-input w3-padding-16" type="text" placeholder="Message" required name="Message"></p>
+        <p>
+          <button class="w3-btn w3-light-grey w3-padding-large" type="submit">
+            <i class="fa fa-paper-plane"></i> SEND MESSAGE
+          </button>
+        </p>
+      </form>
+    <!-- End Contact Section -->
+    </div>
+    
+      <!-- Footer -->
+    <footer class="w3-content w3-padding-64 w3-text-grey w3-xlarge">
+      <i class="fa fa-facebook-official w3-hover-text-indigo"></i>
+      <i class="fa fa-instagram w3-hover-text-purple"></i>
+      <i class="fa fa-snapchat w3-hover-text-yellow"></i>
+      <i class="fa fa-pinterest-p w3-hover-text-red"></i>
+      <i class="fa fa-twitter w3-hover-text-light-blue"></i>
+      <i class="fa fa-linkedin w3-hover-text-indigo"></i>
+    <!-- End footer -->
+    </footer>
+
+  <!-- END PAGE CONTENT -->
+  </div>
+
+</body>
+</html>

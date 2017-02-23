@@ -1,1 +1,1 @@
-heroku logs -t -a dare-server
+heroku logs -t -a karshfoundation
