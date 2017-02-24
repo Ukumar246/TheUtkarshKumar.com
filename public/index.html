@@ -67,13 +67,13 @@
       <h2 class="w3-text-light-grey">Who am I?</h2>
         
         <hr style="width:200px" class="w3-opacity">
-        <p> I am an enthusiastic 21 year old college student from University Toronto. I live and breathe computer technology, ever since I was 7 years old. When I saw my father soldering some wires to fix our broken TV I was in awe, I soon began taking apart all my toys to stip the wires, lights, motors and speakers out of them so I could fit them into something of my own creation. I was a doctor in my room, taking parts out of one device and bringing fixable ones to life. Soon I was getting asked from everyone around my neighborhood to fix their computers, tv's, etc. 
+        <p> I am an enthusiastic 21 year old college student from University Toronto. I live and breathe computer technology, ever since I was 7 years old. When I saw my father soldering some wires to fix our broken TV I was in awe, I soon began taking apart all my toys to strip the wires, lights, motors and speakers out of them so I could fit them into something of my own creation. I was a doctor in my room, taking parts out of one device and bringing fixable ones to life. Soon I was getting asked from everyone around my neighborhood to fix their computers, TV's, etc. 
         <br>
         <br>
-        Once I started high school my focus shifted towards software and hardware; While students in my class would work on HTML and Alice I was making a new device with LEDs which would be controlled by a computer's parallel port. 
+        Once I started high school my focus shifted towards software and hardware; While students in my class would work on HTML and Alice, I was making a new device with LEDs which would be controlled by a computer's parallel port. 
         <br>
         <br>
-        Today I continue to persue my passion and advance my skills at University of Toronto Edward Rogers Electrical and Computer Engineering department. My vision for computer software blends with starting my own business to help people around the world with the incredible advancement of growing technology.
+        Today I continue to pursue my passion and advance my skills at University of Toronto Edward Rogers Electrical and Computer Engineering department. My vision for computer software blends with starting my own business to help people and businesses around the world with the incredible advancement of growing technology.
         </p>
 
       <!-- Skills -->
@@ -181,7 +181,7 @@
       </div><br>
       <p>Lets get in touch. Send me a message:</p>
 
-      <form action="/action_page.php" target="_blank">
+      <form action="/contact_me" target="_blank" id="formoid" title="Send me a message" method="post">
         <p><input class="w3-input w3-padding-16" type="text" placeholder="Name" required name="Name"></p>
         <p><input class="w3-input w3-padding-16" type="text" placeholder="Email" required name="Email"></p>
         <p><input class="w3-input w3-padding-16" type="text" placeholder="Subject" required name="Subject"></p>
@@ -208,6 +208,29 @@
 
   <!-- END PAGE CONTENT -->
   </div>
-
 </body>
+
+
+<!-- Java Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type='text/javascript'>
+    /* attach a submit handler to the form */
+    $("#formoid").submit(function(event) {
+      /* stop form from submitting normally */
+      event.preventDefault();
+      /* get the action attribute from the <form action=""> element */
+      var $form = $( this ),
+          url = $form.attr( 'action' );
+
+      var data =  $("#formoid").serialize();
+      /* Send the data using post with element id name and name2*/
+      var posting = $.post(url, data);
+
+      /* Alerts the results */
+      posting.done(function( data ) {
+        alert('Message sent!');
+      });
+    });
+</script>
+
 </html>

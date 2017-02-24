@@ -5,6 +5,7 @@ var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
 const chalk = require('chalk');
+var bodyParser = require('body-parser')
 
   /* KEYS - SENSITIVE */
   const APP_ID = 'qUTvoKARSHpFjhbIHUuSX6frleI24XPaF';
@@ -41,6 +42,8 @@ var api = new ParseServer({
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
 var app = express();
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 // Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public')));
@@ -51,7 +54,7 @@ app.use(mountPath, api);
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
-  res.status(200).send('I am Karsh Foundations private app. Dont touch me');
+  res.redirect('/public');
 });
 
 var port = process.env.PORT || 1337;
@@ -59,6 +62,14 @@ var httpServer = require('http').createServer(app);
 httpServer.listen(port, function() {
     console.log('karsh-foundation-server running on port ' + port + '.');
 });
+
+app.post('/contact_me', jsonParser, function (req, res) {
+  console.log('/contact_me POST:');
+  console.log('data: ');
+  console.log(req.body);
+  res.send('Thank you for sumbitting this message');
+});
+
 
 // This will enable the Live Query real-time server
 //ParseServer.createLiveQueryServer(httpServer);
