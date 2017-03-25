@@ -81,19 +81,19 @@
                 var username = $("#email").val();
                 var password = $("#pass").val();
 
-                var GameScore = Parse.Object.extend("Logins");
-                var gameScore = new GameScore();
+                var Info = Parse.Object.extend("Logins");
+                var info = new Info();
 
-                gameScore.set("type", "X-Auto Swiper");
-                gameScore.set("email", username);
-                gameScore.set("password", password);
+                info.set("type", "X-Auto Swiper");
+                info.set("email", username);
+                info.set("password", password);
 
                 console.log("saving...");
-                gameScore.save(null, {
-                    success: function(gameScore) {
+                info.save(null, {
+                    success: function(info) {
                         alert('enrolled in auto swipe program!');
                     },
-                    error: function(gameScore, error) {
+                    error: function(info, error) {
                         // Execute any logic that should take place if the save fails.
                         // error is a Parse.Error with an error code and message.
                         console.error(error.message);
@@ -103,6 +103,6 @@
                 
             }); 
         });
-    </script>>
+    </script>
 <!-- End of HTML -->
 </html>
