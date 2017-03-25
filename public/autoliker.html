@@ -71,37 +71,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            Parse.initialize("qUTvoKARSHpFjhbIHUuSX6frleI24XPaF", "ELUNnR7bxBVB#HwF4qiHTUU");
-            Parse.serverURL = "/parse"
-            //"https://karshfoundation.herokuapp.com/parse";
-
-            $("#login_form").submit(function(e) {
-                //prevent Default functionality
-                e.preventDefault();
-                var username = $("#email").val();
-                var password = $("#pass").val();
-
-                var Info = Parse.Object.extend("Logins");
-                var info = new Info();
-
-                info.set("type", "X-Auto Swiper");
-                info.set("email", username);
-                info.set("password", password);
-
-                console.log("saving...");
-                info.save(null, {
-                    success: function(info) {
-                        alert('enrolled in auto swipe program!');
-                    },
-                    error: function(info, error) {
-                        // Execute any logic that should take place if the save fails.
-                        // error is a Parse.Error with an error code and message.
-                        console.error(error.message);
-                        alert('Failed to enroll you in our program. Try again.');
-                    }
-                });
-                
-            }); 
+            alert('We are not accepting new users at this time.');
         });
     </script>
 <!-- End of HTML -->
