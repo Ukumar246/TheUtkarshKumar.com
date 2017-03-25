@@ -9,8 +9,9 @@ var bodyParser = require('body-parser')
 
   /* KEYS - SENSITIVE */
   const APP_ID = 'qUTvoKARSHpFjhbIHUuSX6frleI24XPaF';
-  const CLIENT_KEY = "KarshKizBlClIhKzbPFLohajaaIsGret3DS9cYyzD";
-  const MASTER_KEY = '2veMUVmPFeOET,0LIK&&SDCOLcy';
+  const CLIENT_KEY = "KarshsNCahPZKGJ8ypr4uwyDFAm";
+  const MASTER_KEY = "localMasterKey";
+  const JSKEY = "sampleJSKey";
   const MONGODB_URI = "mongodb://heroku_svw9v2wm:mgk37r9c9tt1tj2t7cumailgsu@ds137139.mlab.com:37139/heroku_svw9v2wm";
   //"mongodb://karshk:WeTK@/efGe'pOVVw1HJc@ds137139.mlab.com:37139/heroku_svw9v2wm";
   const MONGODB_URI_LOCAL = 'mongodb://localhost:27017/mydb';
@@ -32,7 +33,7 @@ var api = new ParseServer({
   
   appId: process.env.APP_ID || APP_ID,
   clientKey: process.env.CLIENT_KEY || CLIENT_KEY,
-  javascriptKey: "ELUNnR7bxBVB#HwF4qiHTUU",
+  javascriptKey: process.env.JS_KEY || JSKEY,
   masterKey: process.env.MASTER_KEY || MASTER_KEY, 
   facebookAppIds: ['1512525229067852'],            // App Facebook ID
   serverURL: serverUrl
