@@ -71,6 +71,12 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
+            $("#login_form").submit(function(e) {
+                
+                e.preventDefault();
+                alert('We are not accepting new users at this time.');
+            });
+
             alert('We are not accepting new users at this time.');
         });
     </script>
