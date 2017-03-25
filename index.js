@@ -32,6 +32,7 @@ var api = new ParseServer({
   
   appId: process.env.APP_ID || APP_ID,
   clientKey: process.env.CLIENT_KEY || CLIENT_KEY,
+  javascriptKey: "ELUNnR7bxBVB#HwF4qiHTUU",
   masterKey: process.env.MASTER_KEY || MASTER_KEY, 
   facebookAppIds: ['1512525229067852'],            // App Facebook ID
   serverURL: serverUrl
