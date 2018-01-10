@@ -8,10 +8,7 @@ const chalk = require('chalk');
 var bodyParser = require('body-parser')
 
   /* KEYS - SENSITIVE */
-  const APP_ID = 'qUTvoKARSHpFjhbIHUuSX6frleI24XPaF';
-  const CLIENT_KEY = "KarshsNCahPZKGJ8ypr4uwyDFAm";
-  const MASTER_KEY = "localMasterKey";
-  const JSKEY = "sampleJSKey";
+/*
   const MONGODB_URI = "mongodb://heroku_svw9v2wm:mgk37r9c9tt1tj2t7cumailgsu@ds137139.mlab.com:37139/heroku_svw9v2wm";
   //"mongodb://karshk:WeTK@/efGe'pOVVw1HJc@ds137139.mlab.com:37139/heroku_svw9v2wm";
   const MONGODB_URI_LOCAL = 'mongodb://localhost:27017/mydb';
@@ -38,6 +35,7 @@ var api = new ParseServer({
   facebookAppIds: ['1512525229067852'],            // App Facebook ID
   serverURL: serverUrl
 });
+*/
 
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
@@ -50,9 +48,10 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 // Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
-// Serve the Parse API on the /parse URL prefix
+/* Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api);
+*/
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
