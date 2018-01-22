@@ -64,13 +64,5 @@ httpServer.listen(port, function() {
     console.log('karsh-foundation-server running on port ' + port + '.');
 });
 
-app.post('/contact_me', jsonParser, function (req, res) {
-  console.log('/contact_me POST:');
-  console.log('data: ');
-  console.log(req.body);
-  res.send('Thank you for sumbitting this message');
-});
-
-
 // This will enable the Live Query real-time server
 //ParseServer.createLiveQueryServer(httpServer);
